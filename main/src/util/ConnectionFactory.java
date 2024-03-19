@@ -34,19 +34,18 @@ public class ConnectionFactory {
     }
 
 
-    public Connection getConnection() {
-        if (connection == null) {
+    public Connection createConnection() {
+        Connection connection = null;
             try {
                 connection = DriverManager.getConnection(URL, USER, PASSWORD);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }
         return connection;
     }
 
     public void printConnectionInfo(){
-        try(Connection conn = getConnection()){
+        try(Connection conn = createConnection()){
             if (conn != null) {
                 System.out.println("Connected to the PostgreSQL server successfully.");
             } else {

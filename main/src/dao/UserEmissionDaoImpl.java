@@ -14,7 +14,7 @@ public class UserEmissionDaoImpl implements UserEmissionDao {
     // CRUD operations
     @Override
     public UserEmission createUserEmission(UserEmission userEmission) {
-        try (Connection connection = ConnectionFactory.getInstance().getConnection();
+        try (Connection connection = ConnectionFactory.getInstance().createConnection();
              PreparedStatement statement = connection.prepareStatement(CRUDQueries.CREATE_USER_EMISSION.getQuery())) {
             statement.setInt(1, userEmission.getUserId());
             statement.setInt(2, userEmission.getActivityId());
@@ -35,7 +35,7 @@ public class UserEmissionDaoImpl implements UserEmissionDao {
     @Override
     public UserEmission readUserEmissionById(int emissionId) {
         UserEmission userEmission = null;
-        try (Connection connection = ConnectionFactory.getInstance().getConnection();
+        try (Connection connection = ConnectionFactory.getInstance().createConnection();
              PreparedStatement statement = connection.prepareStatement(CRUDQueries.READ_USER_EMISSION_BY_ID.getQuery())) {
             statement.setInt(1, emissionId);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -52,7 +52,7 @@ public class UserEmissionDaoImpl implements UserEmissionDao {
     @Override
     public Set<UserEmission> readAllUserEmissions() {
         Set<UserEmission> userEmissions = new HashSet<>();
-        try (Connection connection = ConnectionFactory.getInstance().getConnection();
+        try (Connection connection = ConnectionFactory.getInstance().createConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(CRUDQueries.READ_ALL_USER_EMISSIONS.getQuery())) {
             while (resultSet.next()) {
@@ -66,7 +66,7 @@ public class UserEmissionDaoImpl implements UserEmissionDao {
 
     @Override
     public boolean updateUserEmission(UserEmission userEmission) {
-        try (Connection connection = ConnectionFactory.getInstance().getConnection();
+        try (Connection connection = ConnectionFactory.getInstance().createConnection();
              PreparedStatement statement = connection.prepareStatement(CRUDQueries.UPDATE_USER_EMISSION.getQuery())) {
             statement.setInt(1, userEmission.getUserId());
             statement.setInt(2, userEmission.getActivityId());
@@ -85,7 +85,7 @@ public class UserEmissionDaoImpl implements UserEmissionDao {
 
     @Override
     public boolean deleteUserEmission(int emissionId) {
-        try (Connection connection = ConnectionFactory.getInstance().getConnection();
+        try (Connection connection = ConnectionFactory.getInstance().createConnection();
              PreparedStatement statement = connection.prepareStatement(CRUDQueries.DELETE_USER_EMISSION.getQuery())) {
             statement.setInt(1, emissionId);
             int rowsAffected = statement.executeUpdate();
@@ -110,7 +110,7 @@ public class UserEmissionDaoImpl implements UserEmissionDao {
     @Override
     public double calculateTotalEmissionsForUser(int userId) {
         double totalEmissions = 0;
-        try (Connection connection = ConnectionFactory.getInstance().getConnection();
+        try (Connection connection = ConnectionFactory.getInstance().createConnection();
              PreparedStatement statement = connection.prepareStatement(OperationQueries.CALCULATE_TOTAL_EMISSIONS_FOR_USER.getQuery())) {
             statement.setInt(1, userId);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -128,7 +128,7 @@ public class UserEmissionDaoImpl implements UserEmissionDao {
     @Override
     public Map<Integer, Double> calculateMonthlyEmissionsForUser(int userId) {
         Map<Integer, Double> monthlyEmissions = new HashMap<>();
-        try (Connection connection = ConnectionFactory.getInstance().getConnection();
+        try (Connection connection = ConnectionFactory.getInstance().createConnection();
              PreparedStatement statement = connection.prepareStatement(OperationQueries.CALCULATE_MONTHLY_EMISSIONS_FOR_USER.getQuery())) {
             statement.setInt(1, userId);
             try (ResultSet resultSet = statement.executeQuery()) {

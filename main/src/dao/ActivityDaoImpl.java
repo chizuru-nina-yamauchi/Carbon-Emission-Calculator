@@ -16,7 +16,7 @@ public class ActivityDaoImpl implements ActivityDao {
     // Methods for CRUD operations
     @Override
     public Activity createActivity(Activity activity) {
-        try (Connection connection = ConnectionFactory.getInstance().getConnection();
+        try (Connection connection = ConnectionFactory.getInstance().createConnection();
              PreparedStatement statement = connection.prepareStatement(CRUDQueries.CREATE_ACTIVITY.getQuery())) {
             statement.setString(1, activity.getActivityName());
             statement.setString(2, activity.getActivityDescription());
@@ -34,7 +34,7 @@ public class ActivityDaoImpl implements ActivityDao {
     @Override
     public Activity readActivityById(int activityId) {
         Activity activity = null;
-        try (Connection connection = ConnectionFactory.getInstance().getConnection();
+        try (Connection connection = ConnectionFactory.getInstance().createConnection();
              PreparedStatement statement = connection.prepareStatement(CRUDQueries.READ_ACTIVITY_BY_ID.getQuery())) {
             statement.setInt(1, activityId);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -51,7 +51,7 @@ public class ActivityDaoImpl implements ActivityDao {
     @Override
     public Set<Activity> readAllActivities() {
         Set<Activity> activities = new HashSet<>();
-        try (Connection connection = ConnectionFactory.getInstance().getConnection();
+        try (Connection connection = ConnectionFactory.getInstance().createConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(CRUDQueries.READ_ALL_ACTIVITIES.getQuery())) {
             while (resultSet.next()) {
@@ -65,7 +65,7 @@ public class ActivityDaoImpl implements ActivityDao {
 
     @Override
     public boolean updateActivity(Activity activity) {
-        try (Connection connection = ConnectionFactory.getInstance().getConnection();
+        try (Connection connection = ConnectionFactory.getInstance().createConnection();
              PreparedStatement statement = connection.prepareStatement(CRUDQueries.UPDATE_ACTIVITY.getQuery())) {
             statement.setString(1, activity.getActivityName());
             statement.setString(2, activity.getActivityDescription());
@@ -80,7 +80,7 @@ public class ActivityDaoImpl implements ActivityDao {
 
     @Override
     public boolean deleteActivity(int activityId) {
-        try (Connection connection = ConnectionFactory.getInstance().getConnection();
+        try (Connection connection = ConnectionFactory.getInstance().createConnection();
              PreparedStatement statement = connection.prepareStatement(CRUDQueries.DELETE_ACTIVITY.getQuery())) {
             statement.setInt(1, activityId);
             int rowsAffected = statement.executeUpdate();
@@ -102,7 +102,7 @@ public class ActivityDaoImpl implements ActivityDao {
     @Override
     public Map<String, Double> compareEmissionsBetweenActivities() {
         Map<String, Double> activityEmissions = new HashMap<>();
-        try (Connection connection = ConnectionFactory.getInstance().getConnection();
+        try (Connection connection = ConnectionFactory.getInstance().createConnection();
              PreparedStatement statement = connection.prepareStatement(OperationQueries.COMPARE_EMISSIONS_BETWEEN_ACTIVITIES.getQuery());
              ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
@@ -119,7 +119,7 @@ public class ActivityDaoImpl implements ActivityDao {
     @Override
     public Map<String, Double> listActivitiesAboveThreshold(double threshold) {
         Map<String, Double> activityEmissions = new HashMap<>();
-        try (Connection connection = ConnectionFactory.getInstance().getConnection();
+        try (Connection connection = ConnectionFactory.getInstance().createConnection();
              PreparedStatement statement = connection.prepareStatement(OperationQueries.LIST_ACTIVITIES_ABOVE_THRESHOLD.getQuery())) {
             statement.setDouble(1, threshold);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -138,7 +138,7 @@ public class ActivityDaoImpl implements ActivityDao {
     @Override
     public Map<String, Double> aggregateEmissionsByActivityAndFilterByMinimumEmission(double minimumEmission) {
         Map<String, Double> activityEmissions = new HashMap<>();
-        try (Connection connection = ConnectionFactory.getInstance().getConnection();
+        try (Connection connection = ConnectionFactory.getInstance().createConnection();
              PreparedStatement statement = connection.prepareStatement(OperationQueries.AGGREGATE_EMISSIONS_BY_ACTIVITY_AND_FILTER_BY_MINIMUM_EMISSION.getQuery())) {
             statement.setDouble(1, minimumEmission);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -157,7 +157,7 @@ public class ActivityDaoImpl implements ActivityDao {
     @Override
     public List<String> identifyTop3ActivitiesWithHighestAverageEmissions() {
         List<String> topActivities = new ArrayList<>();
-        try (Connection connection = ConnectionFactory.getInstance().getConnection();
+        try (Connection connection = ConnectionFactory.getInstance().createConnection();
              PreparedStatement statement = connection.prepareStatement(OperationQueries.IDENTIFY_TOP_3_ACTIVITIES_WITH_HIGHEST_AVERAGE_EMISSIONS.getQuery());
              ResultSet resultSet = statement.executeQuery()) {
             int count = 0;

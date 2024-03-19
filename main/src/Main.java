@@ -1,15 +1,17 @@
+import dao.*;
+import model.Activity;
+import model.EmissionGoal;
 import util.ConnectionFactory;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 /*
 *  Demo for CRUD Operations:
 *  1. CRUD operation
-*   Activity CRUD Operations:
-*   Emission Factor CRUD Operations:
-*   User Emission CRUD Operations:
-*   User CRUD Operations:
-*   Emission Goal CRUD Operations:
+*   Activity CRUD Operations(Pick up one model from the model package to demonstrate CRUD operations):
 *
 *  2. Advanced Operations:
 *   Calculate total emissions for a user
@@ -23,6 +25,13 @@ import java.util.Scanner;
 * */
 
 public class Main {
+
+    private static final Menu menu = new Menu();
+    private static final Scanner input = new Scanner(System.in);
+    private static final ActivityDao activityDao = new ActivityDaoImpl();
+    private static final UserEmissionDao userEmissionDao = new UserEmissionDaoImpl();
+    private static final EmissionGoalDao emissionGoalDao = new EmissionGoalDaoImpl();
+
     public static void main(String[] args) {
         /* Instantiate the ConnectionFactory class(Singleton pattern)
          * and print the connection info.
@@ -31,124 +40,297 @@ public class Main {
          */
         ConnectionFactory connectionFactory = ConnectionFactory.getInstance();
         connectionFactory.printConnectionInfo();
+        while (true) {
+            menu.displayMainMenu();
 
-        Scanner input = new Scanner(System.in);
+            int option = menu.getUserChoice();
 
-        while(true) {
+            switch (option) {
+                case 1:
+                    handleCRUDOperation();
+                    break;
+                case 2:
+                    boolean advancedMenuLoop = true; // Variable to control the loop
+                    while (advancedMenuLoop) {
+                        menu.displayAdvancedMenu();
+                        int advancedOption = menu.getUserChoice();
 
-            System.out.println("---------------------------------");
-            System.out.println("Welcome to the Emission Tracker System!");
-
-            System.out.println("Main menu: choose an option");
-            System.out.println("1. CRUD operations");
-            System.out.println("2. Other advanced operations");
-            System.out.println("3. Exit the system");
-
-            System.out.println("Enter the number of the option you want to choose: ");
-
-            System.out.println("---------------------------------");
-
-            try {
-                String optionInput = input.nextLine();
-                int option = Integer.parseInt(optionInput);
-
-                switch (option){
-                    case 1:
-                        System.out.println("You chose CRUD operations");
-                        System.out.println("Choose an option");
-                        System.out.println("1. Activity CRUD operations");
-                        System.out.println("2. Emission Factor CRUD operations");
-                        System.out.println("3. User Emission CRUD operations");
-                        System.out.println("4. User CRUD operations");
-                        System.out.println("5. Emission Goal operations");
-                        System.out.println("6. Back to main menu");
-
-                        System.out.println("Enter the number of the option you want to choose: ");
-                        String crudOptionInput = input.nextLine();
-                        int crudOption = Integer.parseInt(crudOptionInput);
-
-                        switch (crudOption){
+                        switch (advancedOption) {
                             case 1:
-                                System.out.println("You chose Activity operations");
-                                System.out.println("Choose an option");
-                                System.out.println("1. Create an activity");
-                                System.out.println("2. Read an activity by ID");
-                                System.out.println("3. Read all activities");
-                                System.out.println("4. Update an activity");
-                                System.out.println("5. Delete an activity");
-                                System.out.println("6. Back to previous menu");
+                                System.out.println("Enter the user ID:");
+                                int userIdToCalculate = input.nextInt();
+                                input.nextLine(); // Consume the newline character
 
-                                System.out.println("Enter the number of the option you want to choose: ");
+                                // Call the calculateMonthlyEmissionsForUser method from the UserEmissionDaoImpl class to calculate monthly emissions
+                                Map<Integer, Double> monthlyEmissions = userEmissionDao.calculateMonthlyEmissionsForUser(userIdToCalculate);
 
-                                boolean activityOptionValid = true;
-
-                                while(activityOptionValid) {
-
-                                    try {
-                                        String activityOptionInput = input.nextLine();
-                                        int activityOption = Integer.parseInt(activityOptionInput);
-                                        switch (activityOption) {
-                                            case 1:
-                                                System.out.println("You chose to create an activity");
-                                                // Call the createActivity method
-                                                break;
-                                            case 2:
-                                                System.out.println("You chose to read an activity by ID");
-                                                // Call the readActivityById method
-                                                break;
-                                            case 3:
-                                                System.out.println("You chose to read all activities");
-                                                // Call the readAllActivities method
-                                                break;
-                                            case 4:
-                                                System.out.println("You chose to update an activity");
-                                                // Call the updateActivity method
-                                                break;
-                                            case 5:
-                                                System.out.println("You chose to delete an activity");
-                                                // Call the deleteActivity method
-                                                break;
-                                            case 6:
-                                                System.out.println("You chose to go back to the main menu");
-                                                break;
-                                            default:
-                                                System.out.println("Invalid input. Please enter a number between 1 and 6.");
-                                        }
-                                        activityOptionValid = false;
-                                    } catch (NumberFormatException e) {
-                                        System.out.println("Invalid input. Please enter a number.");
+                                // Display the calculated monthly emissions
+                                if (!monthlyEmissions.isEmpty()) {
+                                    System.out.println("Monthly emissions for user with ID " + userIdToCalculate + ":");
+                                    for (Map.Entry<Integer, Double> entry : monthlyEmissions.entrySet()) {
+                                        System.out.println("Month: " + entry.getKey() + ", Emission: " + entry.getValue());
                                     }
+                                } else {
+                                    System.out.println("No monthly emissions found for user with ID " + userIdToCalculate);
                                 }
-
+                                break;
                             case 2:
-                                System.out.println("You chose User Emission operations");
-                                System.out.println("Choose an option");
-                                System.out.println("1. Create a user emission");
-                                System.out.println("2. Read a user emission by ID");
-                                System.out.println("3. Read all user emissions");
+                                // Call the compareEmissionsBetweenActivities method from the ActivityDaoImpl class
+                                Map<String, Double> activityEmissions = activityDao.compareEmissionsBetweenActivities();
+
+                                // Display the comparison results
+                                if (!activityEmissions.isEmpty()) {
+                                    System.out.println("Comparison of emissions between activities:");
+                                    for (Map.Entry<String, Double> entry : activityEmissions.entrySet()) {
+                                        System.out.println("Activity: " + entry.getKey() + ", Average Emission: " + entry.getValue());
+                                    }
+                                } else {
+                                    System.out.println("No emissions data available for comparison between activities.");
+                                }
+                                break;
+                            case 3:
+                                System.out.println("Enter the threshold value:");
+                                double threshold = input.nextDouble();
+                                input.nextLine(); // consume the newline character
+
+                                // Call the listActivitiesAboveThreshold method from the ActivityDaoImpl class
+                                Map<String, Double> activityEmissionsAboveThreshold = activityDao.listActivitiesAboveThreshold(threshold);
+
+                                // Display the activities with emissions above the threshold
+                                if (!activityEmissionsAboveThreshold.isEmpty()) {
+                                    System.out.println("Activities with emissions above the threshold:");
+                                    for (Map.Entry<String, Double> entry : activityEmissionsAboveThreshold.entrySet()) {
+                                        System.out.println("Activity: " + entry.getKey() + ", Emission: " + entry.getValue());
+                                    }
+                                } else {
+                                    System.out.println("No activities found with emissions above the specified threshold.");
+                                }
+                                break;
+                            case 4:
+                                System.out.println("Enter the user ID:");
+                                int userIdForMonthlyEmissions = input.nextInt();
+                                input.nextLine(); // consume the newline character
+
+                                // Call the calculateMonthlyEmissionsForUser method from the UserEmissionDaoImpl class
+                                Map<Integer, Double> monthlyEmissionsToCalculate = userEmissionDao.calculateMonthlyEmissionsForUser(userIdForMonthlyEmissions);
+
+                                // Display the monthly emissions for the user
+                                if (!monthlyEmissionsToCalculate.isEmpty()) {
+                                    System.out.println("Monthly emissions for user with ID " + userIdForMonthlyEmissions + ":");
+                                    for (Map.Entry<Integer, Double> entry : monthlyEmissionsToCalculate.entrySet()) {
+                                        System.out.println("Month: " + entry.getKey() + ", Emission: " + entry.getValue());
+                                    }
+                                } else {
+                                    System.out.println("No monthly emissions found for the specified user ID.");
+                                }
+                                break;
+                            case 5:
+                                Set<Integer> userIds = emissionGoalDao.findUsersExceededEmissionGoals();
+
+                                // Display the user IDs who have exceeded their emission goals
+                                if (!userIds.isEmpty()) {
+                                    System.out.println("Users who have exceeded their emission goals:");
+                                    for (int userId : userIds) {
+                                        System.out.println("User ID: " + userId);
+                                    }
+                                } else {
+                                    System.out.println("No users found who have exceeded their emission goals.");
+                                }
+                                break;
+                            case 6:
+                                System.out.println("Enter the status to find the emission goals:");
+                                String status = input.nextLine();
+
+                                // Call the findEmissionGoalsWithStatus method from the EmissionGoalDaoImpl class
+                                Set<EmissionGoal> emissionGoals = emissionGoalDao.findEmissionGoalsWithStatus(status);
+
+                                // Display the emission goals with the specified status
+                                if (!emissionGoals.isEmpty()) {
+                                    System.out.println("Emission goals with status '" + status + "':");
+                                    for (EmissionGoal goal : emissionGoals) {
+                                        System.out.println("ID: " + goal.getEmissionGoalId() + ", Status: " + goal.getStatus());
+                                    }
+                                } else {
+                                    System.out.println("No emission goals found with status '" + status + "'.");
+                                }
+                                break;
+                            case 7:
+                                System.out.println("Enter the minimum emission value:");
+                                double minimumEmission = input.nextDouble();
+                                input.nextLine(); // consume the newline character
+
+                                Map<String, Double> activityEmissionsToAggregate = activityDao.aggregateEmissionsByActivityAndFilterByMinimumEmission(minimumEmission);
+
+                                // Display the aggregated emissions filtered by minimum emission
+                                if (!activityEmissionsToAggregate.isEmpty()) {
+                                    System.out.println("Aggregated emissions by activity filtered by minimum emission (" + minimumEmission + "):");
+                                    for (Map.Entry<String, Double> entry : activityEmissionsToAggregate.entrySet()) {
+                                        System.out.println("Activity: " + entry.getKey() + ", Total Emission: " + entry.getValue());
+                                    }
+                                } else {
+                                    System.out.println("No activity emissions found exceeding the minimum emission value.");
+                                }
+                                break;
+                            case 8:
+                                List<String> topActivities = activityDao.identifyTop3ActivitiesWithHighestAverageEmissions();
+                                // Display the top 3 activities with the highest average emissions
+                                if (!topActivities.isEmpty()) {
+                                    System.out.println("Top 3 activities with highest average emissions:");
+                                    for (int i = 0; i < topActivities.size(); i++) {
+                                        System.out.println((i + 1) + ". " + topActivities.get(i));
+                                    }
+                                } else {
+                                    System.out.println("No activities found.");
+                                }
+                                break;
+
+                                case 9:
+                                    advancedMenuLoop = false; // Back to main menu
+                                    break;
+                            default:
+                                System.out.println("Invalid input. Please enter a number between 1 and 8.");
                                 break;
                         }
+                    }
+                    break;
 
-                    case 2:
-                        System.out.println("You chose Other advanced operations");
-                        break;
-                    case 3:
-                        System.out.println("You chose to exit the system");
-                        System.out.println("Goodbye!");
-                        System.exit(0);
-                        break;
-                    default:
-                        System.out.println("Invalid input. Please enter a number between 1 and 3.");
-                        break;
-
-                }
-
-                input.close();
-
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a number.");
+                case 3:
+                    System.out.println("You chose to exit the system");
+                    System.out.println("Goodbye!");
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid input. Please enter a number between 1 and 3.");
+                    break;
             }
 
+        }
+    }
+
+    private static void handleCRUDOperation() {
+        while (true) {
+            menu.displayCRUDMenuForActivity();
+            int crudOption = menu.getUserChoice();
+
+            switch (crudOption) {
+                case 1:
+                    handleActivityCRUD();
+                    break;
+
+                case 2:
+                    // Back to main menu
+                    return;
+                default:
+                    System.out.println("Invalid input. Please enter a number between 1 and 6.");
+                    break;
+            }
+        }
+    }
+
+    private static void handleActivityCRUD() {
+        menu.displayActivityCRUDMenu();
+
+        int choice = input.nextInt();
+        input.nextLine(); // consume the newline character
+
+        switch (choice) {
+            case 1:
+                System.out.println("Enter the name of the activity:");
+                String name = input.nextLine();
+
+                System.out.println("Enter the description of the activity:");
+                String description = input.nextLine();
+                // Create an Activity object with the provided details
+                Activity activityToCreate = new Activity(name, description);
+                // Call the createActivity method from the ActivityDaoImpl class to persist the activity
+                Activity createdActivity = activityDao.createActivity(activityToCreate);
+
+                if (createdActivity != null) {
+                    System.out.println("Activity created successfully.");
+                    // Optionally, you can display details of the created activity
+                    System.out.println("Created Activity Details:");
+                    System.out.println("ID: " + createdActivity.getActivityId());
+                    System.out.println("Name: " + createdActivity.getActivityName());
+                    System.out.println("Description: " + createdActivity.getActivityDescription());
+                } else {
+                    System.out.println("Failed to create activity.");
+                }
+                break;
+            case 2:
+                System.out.println("Enter the ID of the activity:");
+                int id = input.nextInt();
+                input.nextLine(); // consume the newline character
+
+                // Call the readActivityById method from the ActivityDaoImpl class to retrieve
+                Activity activityToGet = activityDao.readActivityById(id);
+                if (activityToGet != null) {
+                    System.out.println("Activity found:");
+                    System.out.println("ID: " + activityToGet.getActivityId());
+                    System.out.println("Name: " + activityToGet.getActivityName());
+                    System.out.println("Description: " + activityToGet.getActivityDescription());
+                } else {
+                    System.out.println("Activity not found with ID: " + id);
+                }
+                break;
+            case 3:
+                // Call the readAllActivities method from the ActivityDaoImpl class to retrieve all activities
+                Set<Activity> activities = activityDao.readAllActivities();
+                if (!activities.isEmpty()) {
+                    System.out.println("All activities:");
+                    for (Activity eachActivity : activities) {
+                        System.out.println("ID: " + eachActivity.getActivityId());
+                        System.out.println("Name: " + eachActivity.getActivityName());
+                        System.out.println("Description: " + eachActivity.getActivityDescription());
+                        System.out.println("-----------------------------");
+                    }
+                } else {
+                    System.out.println("No activities found.");
+                }
+
+                    break;
+            case 4:
+                System.out.println("Enter the ID of the activity you want to update:");
+                int idToUpdate = input.nextInt();
+                input.nextLine(); // Consume newline character
+
+                // Retrieve the existing activity by ID
+                Activity existingActivity = activityDao.readActivityById(idToUpdate);
+                if (existingActivity != null) {
+                    // Prompt the user to enter updated details for the activity
+                    System.out.println("Enter the new name for the activity:");
+                    String newName = input.nextLine();
+                    System.out.println("Enter the new description for the activity:");
+                    String newDescription = input.nextLine();
+
+                    // Update the existing activity object with the new details
+                    existingActivity.setActivityName(newName);
+                    existingActivity.setActivityDescription(newDescription);
+
+                    // Update the activity in the database
+                    boolean success = activityDao.updateActivity(existingActivity);
+                    if (success) {
+                        System.out.println("Activity updated successfully.");
+                    } else {
+                        System.out.println("Failed to update activity.");
+                    }
+                } else {
+                    System.out.println("No activity found with ID: " + idToUpdate);
+                }
+                break;
+            case 5:
+                System.out.println("Enter the ID of the activity to delete:");
+                int idToDelete = input.nextInt();
+                boolean success = activityDao.deleteActivity(idToDelete);
+                if (success) {
+                    System.out.println("Activity deleted successfully.");
+                } else {
+                    System.out.println("Failed to delete activity.");
+                }
+                break;
+            case 6:
+                return;
+            default:
+                System.out.println("Invalid input. Please enter a number between 1 and 6.");
+                break;
         }
 
     }

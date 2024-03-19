@@ -11,7 +11,7 @@ import java.util.Set;
 public class UserDaoImpl implements UserDao {
     @Override
     public User createUser(User user) {
-        try (Connection connection = ConnectionFactory.getInstance().getConnection();
+        try (Connection connection = ConnectionFactory.getInstance().createConnection();
              PreparedStatement statement = connection.prepareStatement(CRUDQueries.CREATE_USER.getQuery())) {
             statement.setString(1, user.getUsername());
             statement.setString(2, user.getEmail());
@@ -30,7 +30,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User readUserById(int userId) {
         User user = null;
-        try (Connection connection = ConnectionFactory.getInstance().getConnection();
+        try (Connection connection = ConnectionFactory.getInstance().createConnection();
              PreparedStatement statement = connection.prepareStatement(CRUDQueries.READ_USER_BY_ID.getQuery())) {
             statement.setInt(1, userId);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -47,7 +47,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public Set<User> readAllUsers() {
         Set<User> users = new HashSet<>();
-        try (Connection connection = ConnectionFactory.getInstance().getConnection();
+        try (Connection connection = ConnectionFactory.getInstance().createConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(CRUDQueries.READ_ALL_USERS.getQuery())) {
             while (resultSet.next()) {
@@ -61,7 +61,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean updateUser(User user) {
-        try (Connection connection = ConnectionFactory.getInstance().getConnection();
+        try (Connection connection = ConnectionFactory.getInstance().createConnection();
              PreparedStatement statement = connection.prepareStatement(CRUDQueries.UPDATE_USER.getQuery())) {
             statement.setString(1, user.getUsername());
             statement.setString(2, user.getEmail());
@@ -78,7 +78,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean deleteUser(int userId) {
-        try (Connection connection = ConnectionFactory.getInstance().getConnection();
+        try (Connection connection = ConnectionFactory.getInstance().createConnection();
              PreparedStatement statement = connection.prepareStatement(CRUDQueries.DELETE_USER.getQuery())) {
             statement.setInt(1, userId);
             int rowsAffected = statement.executeUpdate();
