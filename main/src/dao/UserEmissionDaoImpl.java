@@ -109,7 +109,7 @@ public class UserEmissionDaoImpl implements UserEmissionDao {
 
     @Override
     public double calculateTotalEmissionsForUser(int userId) {
-        double totalEmissions = 0;
+        double totalEmissions =0.0;
         try (Connection connection = ConnectionFactory.getInstance().createConnection();
              PreparedStatement statement = connection.prepareStatement(OperationQueries.CALCULATE_TOTAL_EMISSIONS_FOR_USER.getQuery())) {
             statement.setInt(1, userId);

@@ -8,10 +8,9 @@ public enum OperationQueries {
      * SQL query to calculate total emissions for a user.
      */
     CALCULATE_TOTAL_EMISSIONS_FOR_USER(
-            "SELECT u.user_id, u.username, SUM(ue.emission) AS total_emission " +
-                    "FROM Users u " +
-                    "JOIN User_Emissions ue ON u.user_id = ue.user_id " +
-                    "GROUP BY u.user_id, u.username"
+            "SELECT SUM(emission) AS total_emission " +
+                    "FROM user_emissions " +
+                    "WHERE user_id = ?"
     ),
 
     /**

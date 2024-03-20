@@ -61,18 +61,12 @@ public class Main {
                                 int userIdToCalculate = input.nextInt();
                                 input.nextLine(); // Consume the newline character
 
-                                // Call the calculateMonthlyEmissionsForUser method from the UserEmissionDaoImpl class to calculate monthly emissions
-                                Map<Integer, Double> monthlyEmissions = userEmissionDao.calculateMonthlyEmissionsForUser(userIdToCalculate);
+                                // Call the calculateTotalEmissionsForUser method from the UserEmissionDaoImpl class to calculate total emissions
+                                double totalEmissions = userEmissionDao.calculateTotalEmissionsForUser(userIdToCalculate);
 
-                                // Display the calculated monthly emissions
-                                if (!monthlyEmissions.isEmpty()) {
-                                    System.out.println("Monthly emissions for user with ID " + userIdToCalculate + ":");
-                                    for (Map.Entry<Integer, Double> entry : monthlyEmissions.entrySet()) {
-                                        System.out.println("Month: " + entry.getKey() + ", Emission: " + entry.getValue());
-                                    }
-                                } else {
-                                    System.out.println("No monthly emissions found for user with ID " + userIdToCalculate);
-                                }
+                                // Display the calculated total emissions
+                                System.out.println("Total emissions for user with ID " + userIdToCalculate + ": " + totalEmissions);
+
                                 break;
                             case 2:
                                 // Call the compareEmissionsBetweenActivities method from the ActivityDaoImpl class
@@ -248,7 +242,6 @@ public class Main {
                     System.out.println("Activity created successfully.");
                     // Optionally, you can display details of the created activity
                     System.out.println("Created Activity Details:");
-                    System.out.println("ID: " + createdActivity.getActivityId());
                     System.out.println("Name: " + createdActivity.getActivityName());
                     System.out.println("Description: " + createdActivity.getActivityDescription());
                 } else {
