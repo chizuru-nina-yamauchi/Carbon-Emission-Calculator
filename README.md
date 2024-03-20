@@ -219,9 +219,9 @@ Submit your project via GitHub Classroom. Ensure your repository is well-organiz
 ### Setting Up the Database Environment
 - Install PostgreSQL and set up a new database named `carbon_emission`.
 - these command on terminal
-`sudo -u postgres psql` -- Access PostgreSQL shell
-`CREATE DATABASE carbon_emission;` -- Create database
-`\c carbon_emission` -- Connect to database
+  - `sudo -u postgres psql` -- Access PostgreSQL shell
+  - `CREATE DATABASE carbon_emission;` -- Create database
+  - `\c carbon_emission` -- Connect to database
 
 - Project Structure on IntelliJ to connect to the database
   - Check if JDK is set up 
