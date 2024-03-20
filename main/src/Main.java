@@ -189,6 +189,10 @@ public class Main {
                     break;
 
                 case 3:
+                    visualizeEmissionsForUserOverTime();
+                    break;
+
+                case 4:
                     System.out.println("You chose to exit the system");
                     System.out.println("Goodbye!");
                     System.exit(0);
@@ -197,6 +201,36 @@ public class Main {
                     break;
             }
 
+        }
+    }
+
+    private static void visualizeEmissionsForUserOverTime(){
+        System.out.println("Enter the user ID:");
+        int userId = input.nextInt();
+        input.nextLine(); // Consume newline
+
+        Map<Integer, Double> monthlyEmissions = userEmissionDao.calculateMonthlyEmissionsForUser(userId);
+
+        if (!monthlyEmissions.isEmpty()) {
+            System.out.println("Monthly emissions for user with ID " + userId + ":");
+
+            for (Map.Entry<Integer, Double> entry : monthlyEmissions.entrySet()) {
+                int month = entry.getKey();
+                double emission = entry.getValue();
+
+                System.out.print("Month " + month + ": ");
+                printEmissionBar(emission);
+                System.out.println(" " + emission);
+            }
+        } else {
+            System.out.println("No monthly emissions found for the specified user ID.");
+        }
+    }
+
+    private static void printEmissionBar(double emission) {
+        int numberOfAsterisks = (int) Math.round(emission); // Round to the nearest integer
+        for (int i = 0; i < numberOfAsterisks; i++) {
+            System.out.print("*");
         }
     }
 

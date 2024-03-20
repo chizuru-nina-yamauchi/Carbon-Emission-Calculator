@@ -13,7 +13,8 @@ public class Menu {
         System.out.println("Main menu: choose an option");
         System.out.println("1. CRUD operations Demo with Activity");
         System.out.println("2. Other advanced operations");
-        System.out.println("3. Exit the system");
+        System.out.println("3. Visualize carbon emissions for a user over time");
+        System.out.println("4. Exit the system");
         System.out.println("Enter the number of the option you want to choose: ");
         System.out.println("---------------------------------");
     }
