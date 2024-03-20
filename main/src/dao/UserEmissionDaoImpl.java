@@ -130,7 +130,9 @@ public class UserEmissionDaoImpl implements UserEmissionDao {
         Map<Integer, Double> monthlyEmissions = new HashMap<>();
         try (Connection connection = ConnectionFactory.getInstance().createConnection();
              PreparedStatement statement = connection.prepareStatement(OperationQueries.CALCULATE_MONTHLY_EMISSIONS_FOR_USER.getQuery())) {
-            statement.setInt(1, userId);
+
+            statement.setInt(1, userId); // Set the user_id parameter
+
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     int month = resultSet.getInt("month");
@@ -143,6 +145,7 @@ public class UserEmissionDaoImpl implements UserEmissionDao {
         }
         return monthlyEmissions;
     }
+
 
 
 

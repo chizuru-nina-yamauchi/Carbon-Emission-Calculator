@@ -221,109 +221,111 @@ public class Main {
     }
 
     private static void handleActivityCRUD() {
-        menu.displayActivityCRUDMenu();
+        while(true) {
+            menu.displayActivityCRUDMenu();
 
-        int choice = input.nextInt();
-        input.nextLine(); // consume the newline character
+            int choice = input.nextInt();
+            input.nextLine(); // consume the newline character
 
-        switch (choice) {
-            case 1:
-                System.out.println("Enter the name of the activity:");
-                String name = input.nextLine();
+            switch (choice) {
+                case 1:
+                    System.out.println("Enter the name of the activity:");
+                    String name = input.nextLine();
 
-                System.out.println("Enter the description of the activity:");
-                String description = input.nextLine();
-                // Create an Activity object with the provided details
-                Activity activityToCreate = new Activity(name, description);
-                // Call the createActivity method from the ActivityDaoImpl class to persist the activity
-                Activity createdActivity = activityDao.createActivity(activityToCreate);
+                    System.out.println("Enter the description of the activity:");
+                    String description = input.nextLine();
+                    // Create an Activity object with the provided details
+                    Activity activityToCreate = new Activity(name, description);
+                    // Call the createActivity method from the ActivityDaoImpl class to persist the activity
+                    Activity createdActivity = activityDao.createActivity(activityToCreate);
 
-                if (createdActivity != null) {
-                    System.out.println("Activity created successfully.");
-                    // Optionally, you can display details of the created activity
-                    System.out.println("Created Activity Details:");
-                    System.out.println("Name: " + createdActivity.getActivityName());
-                    System.out.println("Description: " + createdActivity.getActivityDescription());
-                } else {
-                    System.out.println("Failed to create activity.");
-                }
-                break;
-            case 2:
-                System.out.println("Enter the ID of the activity:");
-                int id = input.nextInt();
-                input.nextLine(); // consume the newline character
-
-                // Call the readActivityById method from the ActivityDaoImpl class to retrieve
-                Activity activityToGet = activityDao.readActivityById(id);
-                if (activityToGet != null) {
-                    System.out.println("Activity found:");
-                    System.out.println("ID: " + activityToGet.getActivityId());
-                    System.out.println("Name: " + activityToGet.getActivityName());
-                    System.out.println("Description: " + activityToGet.getActivityDescription());
-                } else {
-                    System.out.println("Activity not found with ID: " + id);
-                }
-                break;
-            case 3:
-                // Call the readAllActivities method from the ActivityDaoImpl class to retrieve all activities
-                Set<Activity> activities = activityDao.readAllActivities();
-                if (!activities.isEmpty()) {
-                    System.out.println("All activities:");
-                    for (Activity eachActivity : activities) {
-                        System.out.println("ID: " + eachActivity.getActivityId());
-                        System.out.println("Name: " + eachActivity.getActivityName());
-                        System.out.println("Description: " + eachActivity.getActivityDescription());
-                        System.out.println("-----------------------------");
+                    if (createdActivity != null) {
+                        System.out.println("Activity created successfully.");
+                        // Optionally, you can display details of the created activity
+                        System.out.println("Created Activity Details:");
+                        System.out.println("Name: " + createdActivity.getActivityName());
+                        System.out.println("Description: " + createdActivity.getActivityDescription());
+                    } else {
+                        System.out.println("Failed to create activity.");
                     }
-                } else {
-                    System.out.println("No activities found.");
-                }
+                    break;
+                case 2:
+                    System.out.println("Enter the ID of the activity:");
+                    int id = input.nextInt();
+                    input.nextLine(); // consume the newline character
+
+                    // Call the readActivityById method from the ActivityDaoImpl class to retrieve
+                    Activity activityToGet = activityDao.readActivityById(id);
+                    if (activityToGet != null) {
+                        System.out.println("Activity found:");
+                        System.out.println("ID: " + activityToGet.getActivityId());
+                        System.out.println("Name: " + activityToGet.getActivityName());
+                        System.out.println("Description: " + activityToGet.getActivityDescription());
+                    } else {
+                        System.out.println("Activity not found with ID: " + id);
+                    }
+                    break;
+                case 3:
+                    // Call the readAllActivities method from the ActivityDaoImpl class to retrieve all activities
+                    Set<Activity> activities = activityDao.readAllActivities();
+                    if (!activities.isEmpty()) {
+                        System.out.println("All activities:");
+                        for (Activity eachActivity : activities) {
+                            System.out.println("ID: " + eachActivity.getActivityId());
+                            System.out.println("Name: " + eachActivity.getActivityName());
+                            System.out.println("Description: " + eachActivity.getActivityDescription());
+                            System.out.println("-----------------------------");
+                        }
+                    } else {
+                        System.out.println("No activities found.");
+                    }
 
                     break;
-            case 4:
-                System.out.println("Enter the ID of the activity you want to update:");
-                int idToUpdate = input.nextInt();
-                input.nextLine(); // Consume newline character
+                case 4:
+                    System.out.println("Enter the ID of the activity you want to update:");
+                    int idToUpdate = input.nextInt();
+                    input.nextLine(); // Consume newline character
 
-                // Retrieve the existing activity by ID
-                Activity existingActivity = activityDao.readActivityById(idToUpdate);
-                if (existingActivity != null) {
-                    // Prompt the user to enter updated details for the activity
-                    System.out.println("Enter the new name for the activity:");
-                    String newName = input.nextLine();
-                    System.out.println("Enter the new description for the activity:");
-                    String newDescription = input.nextLine();
+                    // Retrieve the existing activity by ID
+                    Activity existingActivity = activityDao.readActivityById(idToUpdate);
+                    if (existingActivity != null) {
+                        // Prompt the user to enter updated details for the activity
+                        System.out.println("Enter the new name for the activity:");
+                        String newName = input.nextLine();
+                        System.out.println("Enter the new description for the activity:");
+                        String newDescription = input.nextLine();
 
-                    // Update the existing activity object with the new details
-                    existingActivity.setActivityName(newName);
-                    existingActivity.setActivityDescription(newDescription);
+                        // Update the existing activity object with the new details
+                        existingActivity.setActivityName(newName);
+                        existingActivity.setActivityDescription(newDescription);
 
-                    // Update the activity in the database
-                    boolean success = activityDao.updateActivity(existingActivity);
-                    if (success) {
-                        System.out.println("Activity updated successfully.");
+                        // Update the activity in the database
+                        boolean success = activityDao.updateActivity(existingActivity);
+                        if (success) {
+                            System.out.println("Activity updated successfully.");
+                        } else {
+                            System.out.println("Failed to update activity.");
+                        }
                     } else {
-                        System.out.println("Failed to update activity.");
+                        System.out.println("No activity found with ID: " + idToUpdate);
                     }
-                } else {
-                    System.out.println("No activity found with ID: " + idToUpdate);
-                }
-                break;
-            case 5:
-                System.out.println("Enter the ID of the activity to delete:");
-                int idToDelete = input.nextInt();
-                boolean success = activityDao.deleteActivity(idToDelete);
-                if (success) {
-                    System.out.println("Activity deleted successfully.");
-                } else {
-                    System.out.println("Failed to delete activity.");
-                }
-                break;
-            case 6:
-                return;
-            default:
-                System.out.println("Invalid input. Please enter a number between 1 and 6.");
-                break;
+                    break;
+                case 5:
+                    System.out.println("Enter the ID of the activity to delete:");
+                    int idToDelete = input.nextInt();
+                    boolean success = activityDao.deleteActivity(idToDelete);
+                    if (success) {
+                        System.out.println("Activity deleted successfully.");
+                    } else {
+                        System.out.println("Failed to delete activity.");
+                    }
+                    break;
+                case 6:
+                    return;
+                default:
+                    System.out.println("Invalid input. Please enter a number between 1 and 6.");
+                    break;
+            }
         }
 
     }

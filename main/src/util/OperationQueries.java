@@ -40,6 +40,7 @@ public enum OperationQueries {
     CALCULATE_MONTHLY_EMISSIONS_FOR_USER(
             "SELECT EXTRACT(MONTH FROM ue.date) AS month, SUM(ue.emission) AS monthly_emission " +
                     "FROM User_Emissions ue " +
+                    "WHERE ue.user_id = ? " +
                     "GROUP BY month"
     ),
 
