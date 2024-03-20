@@ -228,7 +228,7 @@ Submit your project via GitHub Classroom. Ensure your repository is well-organiz
   - Import JDBC driver for PostgreSQL from project libraries
   - Select PostgreSQL from `Data Source` and configure the database
   - Test if the connection is successful
-- Ensure that your PostgreSQL server is running and accessible.
+
 ### Tables and inserted data
 
 ![pic1](./resources/pic1.png)
