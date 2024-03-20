@@ -421,7 +421,7 @@ Submit your project via GitHub Classroom. Ensure your repository is well-organiz
 
 
 ----
-#### From here by me:
+#### From here written by me:
 
 # CARBON-EMISSION-CALCULATOR
 ## Database instruction
@@ -439,3 +439,64 @@ Submit your project via GitHub Classroom. Ensure your repository is well-organiz
   - Select PostgreSQL from `Data Source` and configure the database
   - Test if the connection is successful
 - Ensure that your PostgreSQL server is running and accessible.
+### Tables and inserted data
+
+![pic1](./resources/pic1.png)
+
+![pic2](./resources/pic2.png)
+
+![pic3](./resources/pic3.png)
+
+![pic4](./resources/pic4.png)
+
+## Run the application
+
+ - Create the new activity
+
+![pic8](./resources/pic8.png)
+
+ - Created data in the table
+
+![pic5](./resources/pic5.png)
+
+ - Read the activity by id and all the activities
+
+![pic9](./resources/pic9.png)
+
+![pic10](./resources/pic10.png)
+
+![pic11](./resources/pic11.png)
+
+ - Updated information for the Carpooling on the table
+
+![pic6](./resources/pic6.png)
+
+ - Id 10 is deleted from the table
+
+![pic7](./resources/pic7.png)
+
+ - Going back to main menu and choose the other operations
+
+![pic12](./resources/pic12.png)
+
+![pic13](./resources/pic13.png)
+
+![pic14](./resources/pic14.png)
+
+![pic15](./resources/pic15.png)
+
+![pic16](./resources/pic16.png)
+
+ - Visualize the user's carbon emissions over time using a simple chart or graph
+
+![pic17](./resources/pic17.png)
+
+![pic18](./resources/pic18.png)
+
+### Run the test methods
+
+![pic19](./resources/pic19.png)
+
+![pic20](./resources/pic20.png)
+
+![pic21](./resources/pic21.png)
