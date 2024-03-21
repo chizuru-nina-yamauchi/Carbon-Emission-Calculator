@@ -95,7 +95,7 @@ public class UserDaoImpl implements UserDao {
         String username = resultSet.getString("username");
         String email = resultSet.getString("email");
         String password = resultSet.getString("password_hash");
-        return new User(userId, username, email, password);
+        return new User(userId, username, password, email);
     }
 
 }
